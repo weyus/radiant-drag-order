@@ -1,7 +1,7 @@
 # Uncomment this if you reference any of your controllers in activate
 # require_dependency 'application_controller'
 
-class MoreExtension < Radiant::Extension
+class DragExtension < Radiant::Extension
   version "1.0"
   description "Radiant Drag allows you to reorder pages funly"
   url "http://github.com/squaretalent/radiant-drag-extension"
