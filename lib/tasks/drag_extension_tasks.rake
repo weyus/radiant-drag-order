@@ -18,7 +18,6 @@ namespace :radiant do
         Dir[DragExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
           path = file.sub(DragExtension.root, '')
           directory = File.dirname(path)
-          puts "Copying #{path}..."
           mkdir_p RAILS_ROOT + directory
           cp file, RAILS_ROOT + path
         end

@@ -18,7 +18,7 @@ var DragOrder = Class.create({
   initialize: function(table) {
     // Needed in order to use SiteMap function. Already created in sitemap.js,
     // but cannot be referred to...
-    this.sMap = new SiteMap( new Element('table') );
+    this.sMap = SiteMapBehavior.attach(new Element('table'));
     
     // Attach listeners to drag images in table
     var _this = this;
@@ -80,7 +80,7 @@ var DragOrder = Class.create({
       if (evt.pageY >= top && evt.pageY <= top + _this.rowHeight) {
         
         // If row has children and is collapsed, create timer for expansion
-        if (obj.hasClassName('children-hidden') && _this.expandObj != obj) {
+        if (obj.hasClassName('children_hidden') && _this.expandObj != obj) {
           _this.expandObj.row = obj;
           if (_this.expandObj.timer)
             clearTimeout(_this.expandObj.timer);
@@ -95,7 +95,7 @@ var DragOrder = Class.create({
         var targetLoc;
         // If on the upper half of the row, put the dragline at the top of the row (= bottom of previous)
         if (evt.pageY >= top && evt.pageY <= top + _this.rowHeight / 2 && obj.previous()) {
-          if (obj.previous().hasClassName('children-visible')) {
+          if (obj.previous().hasClassName('children_visible')) {
             targetRow = obj;
             targetLoc = _this.BEFORE;
           }
@@ -112,8 +112,8 @@ var DragOrder = Class.create({
             targetLoc = _this.CHILD;
           }
           else {
-            targetRow = obj.hasClassName('children-visible') ? obj.next() : obj;
-            targetLoc = obj.hasClassName('children-visible') ? _this.BEFORE : _this.AFTER;
+            targetRow = obj.hasClassName('children_visible') ? obj.next() : obj;
+            targetLoc = obj.hasClassName('children_visible') ? _this.BEFORE : _this.AFTER;
           }
         }
         
@@ -184,8 +184,5 @@ var DragOrder = Class.create({
 
 // If the DOM is loaded, create the DragOrder object
 document.observe('dom:loaded', function() {
-  when('table.index', function(table){
-  if(table.identify() == 'site-map')
-    new DragOrder(table);
-  });
+  new DragOrder('site_map');
 });
