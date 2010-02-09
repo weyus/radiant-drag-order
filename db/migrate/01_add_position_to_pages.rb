@@ -10,7 +10,6 @@ class AddPositionToPages < ActiveRecord::Migration
         end
         ActiveRecord::Base.record_timestamps = true
       end
-    end
   end
   
   def self.down
@@ -23,4 +22,5 @@ class AddPositionToPages < ActiveRecord::Migration
       put_children_into_list(pg)
     end
   end
+  
 end
