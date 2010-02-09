@@ -19,10 +19,10 @@ class MoreExtension < Radiant::Extension
     admin.pages.index.add :node, "drag_order"
     admin.pages.index.add :top, "header"
     
-    Page.send :include, DragOrder::PageExtensions
-    Admin::PagesController.send :helper, DragOrder::PageHelper
-    Admin::PagesController.send :include, DragOrder::PageControllerExtensions
-    StandardTags.send :include, DragOrder::TagExtensions
+    Page.send :include, Drag::PageExtensions
+    Admin::PagesController.send :helper, Drag::PageHelper
+    Admin::PagesController.send :include, Drag::PageControllerExtensions
+    StandardTags.send :include, Drag::TagExtensions
   end
   
 end

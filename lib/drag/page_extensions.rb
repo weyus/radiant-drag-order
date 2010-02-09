@@ -1,4 +1,4 @@
-module DragOrder::PageExtensions
+module Drag::PageExtensions
   def self.included(base)
     base.class_eval {
       self.reflections[:children].options[:order] = "position ASC"

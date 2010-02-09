@@ -1,6 +1,6 @@
-module DragOrder::PageHelper
+module Drag::PageHelper
   def order_dragger
-    image("drag_order.png",
+    image("drag.png",
           :alt => "Drag this icon to move the page"
           )
   end
