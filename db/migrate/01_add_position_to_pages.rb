@@ -10,6 +10,7 @@ class AddPositionToPages < ActiveRecord::Migration
         end
         ActiveRecord::Base.record_timestamps = true
       end
+    end
   end
   
   def self.down
