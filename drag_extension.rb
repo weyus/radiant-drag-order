@@ -15,9 +15,9 @@ class DragExtension < Radiant::Extension
   end
   
   def activate
-    admin.pages.index.add :sitemap_head, "drag_order_header"
-    admin.pages.index.add :node, "drag_order"
-    admin.pages.index.add :top, "header"
+    admin.pages.index.add :sitemap_head, "drag_order_th"
+    admin.pages.index.add :node, "drag_order_td"
+    admin.pages.index.add :top, "top"
     
     Page.send :include, Drag::PageExtensions
     Admin::PagesController.send :helper, Drag::PageHelper
