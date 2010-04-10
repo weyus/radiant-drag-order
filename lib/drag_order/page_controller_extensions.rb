@@ -97,8 +97,18 @@ module DragOrder::PageControllerExtensions
       end
     end
     
+    clear_cache!
+    
     # Redirect back to the admin pages page
     request.env["HTTP_REFERER"] ? redirect_to(:back) : redirect_to(admin_page_url)
   end
   
+private
+  def clear_cache!
+    if defined? ResponseCache == 'constant'
+      ResponseCache.instance.clear
+    else
+      Radiant::Cache.clear
+    end
+  end
 end
