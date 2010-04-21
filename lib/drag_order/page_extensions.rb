@@ -4,13 +4,15 @@ module DragOrder::PageExtensions
       self.reflections[:children].options[:order] = "position ASC"
       
       before_validation_on_create :set_initial_position
-      validates_numericality_of :position, :greater_than_or_equal_to => 0, :only_integer => true
-      validates_uniqueness_of :position, :scope => :parent_id
     end
     
     if defined?(Page::NONDRAFT_FIELDS)
       Page::NONDRAFT_FIELDS << 'position'
     end
+  end
+  
+  def following_siblings
+    self.class.find_all_by_parent_id(parent_id, :conditions => [ 'position > ?', position ] )
   end
 
 private
