@@ -5,12 +5,6 @@ module DragOrder::PageControllerExtensions
     @loc = params[:pos].to_i
     @copy = params[:copy].to_i > 0
     
-    # Set initial position if the page has none yet
-    if @page.position == nil
-      last_sibling = Page.find_by_parent_id( @page.parent.id, :order => [ "position DESC" ])
-      @page.position = last_sibling.position.to_i + 1
-    end
-    
     if !@copy
       # Remove the page from its old position
       @old_siblings = Page.find_all_by_parent_id( @page.parent.id, :conditions => [ 'position > ?', @page.position ] )
