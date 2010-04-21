@@ -16,7 +16,7 @@ module DragOrder::PageControllerExtensions
     
     if !@copy
       # Remove the page from its old position
-      @old_siblings = Page.find_all_by_parent_id( @page.parent.id, :conditions => [ "position > " + @page.position.to_s ] )
+      @old_siblings = Page.find_all_by_parent_id( @page.parent.id, :conditions => [ 'position > ?', @page.position ] )
       @old_siblings.each do |s|
         s.position -= 1
         s.save
@@ -26,7 +26,7 @@ module DragOrder::PageControllerExtensions
     @rel.reload
     if @loc != 2
       # Make room for the page
-      @new_siblings = Page.find_all_by_parent_id( @rel.parent.id, :conditions => [ "position >= " + (@rel.position.to_i + @loc).to_s ] )
+      @new_siblings = Page.find_all_by_parent_id( @rel.parent.id, :conditions => [ 'position >= ?', (@rel.position.to_i + @loc).to_s ] )
       @new_siblings.each do |s|
         if s.id != @page.id || @copy
           s.position += 1
@@ -55,9 +55,9 @@ module DragOrder::PageControllerExtensions
     
     if @copy || @page.parent != old_parent # @page.parent.changed? always gives false...
       # Check for slug duplication
-      check_slug = @page.slug.sub /-copy-?[0-9]*$/, ""
+      check_slug = @page.slug.sub(/-copy-?[0-9]*$/, "")
       count = 0
-      duplicates = Page.find_all_by_parent_id( @loc == 2 ? @rel.id : @rel.parent.id, :conditions => [ "slug LIKE '#{check_slug}%%'" ] )
+      duplicates = Page.find_all_by_parent_id( @loc == 2 ? @rel.id : @rel.parent.id, :conditions => [ "slug LIKE '?%%'", check_slug ] )
       duplicates.each do |d|
         m = d.slug.match("^#{check_slug}(-copy-?([0-9]*))?$")
         if !m.nil?
