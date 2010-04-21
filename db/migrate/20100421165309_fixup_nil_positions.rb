@@ -2,8 +2,9 @@ class FixupNilPositions < ActiveRecord::Migration
   def self.up
     say_with_time('Fixing position values on all pages…') do
       without_timestamping do
-        homepage = Page.find_by_parent_id(nil)
-        fix_child_positions(homepage)
+        if homepage = Page.find_by_parent_id(nil)
+          fix_child_positions(homepage)
+        end
       end
     end
   end
