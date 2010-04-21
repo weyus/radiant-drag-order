@@ -1,5 +1,4 @@
 module DragOrder::PageControllerExtensions
-
   def move_to
     @page = Page.find(params[:id])
     @rel = Page.find(params[:rel])
@@ -8,10 +7,8 @@ module DragOrder::PageControllerExtensions
     
     # Set initial position if the page has none yet
     if @page.position == nil
-      @last_page = Page.find_all_by_parent_id( @page.parent.id, :order => [ "position DESC" ], :limit => 1 )
-      @last_page.each do |p|
-        @page.position = p.position.to_i + 1
-      end
+      last_sibling = Page.find_by_parent_id( @page.parent.id, :order => [ "position DESC" ])
+      @page.position = last_sibling.position.to_i + 1
     end
     
     if !@copy
