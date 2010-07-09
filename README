@@ -1,4 +1,4 @@
-= Drag v0.3.4 For Radiant 0.9.0
+= DragOrder for Radiant 0.9.0+
 
 Created by Bright 4, February 2009. Inspired by and based on Sean Cribbs' Reorder extension.
 
@@ -8,12 +8,17 @@ Only designers and admins have the ability to re-order pages
 
 == Installation
 
-    git clone git://github.com/squaretalent/radiant-drag-extension.git vendor/extensions/drag
+    git clone git://github.com/gerrit/radiant-drag-order.git vendor/extensions/drag_order
     
-    rake radiant:extensions:drag:migrate
-    rake radiant:extensions:drag:update
+    rake radiant:extensions:drag_order:migrate
+    rake radiant:extensions:drag_order:update
 
 == Version History
+
+# v0.3.5 - 2010-07-09
+- renamed back to DragOrder
+- SQL Injection fixes
+- code cleanup
 
 # v0.3.4 - 29-03-2010
 - Moved assets to extension/drag directory
