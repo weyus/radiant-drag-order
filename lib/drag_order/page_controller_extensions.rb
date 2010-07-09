@@ -38,11 +38,9 @@ private
   end
   
   def ensure_no_nil_position_values
-    all_new_pages = Page.find_all_by_parent_id( @page.parent.id, :conditions => ["position is null"] )
-    if(all_new_pages.size > 0)
-      all_pages = Page.find_all_by_parent_id( @page.parent.id, :order => ["position ASC"] )
+    if @page.newly_created_siblings?
       i = 1
-      all_pages.each do |p|
+      @page.siblings_and_self.each do |p|
         p.position = i
         p.save
         i += 1
@@ -69,7 +67,7 @@ private
   end
   
   def make_room_for_page
-    new_siblings = Page.find_all_by_parent_id(@target.parent_id, :conditions => [ 'position >= ?', @target.position + @current_position ])
+    new_siblings = Page.children_of_after_position(@target.parent_id, @target.position + @current_position)
     new_siblings.each do |sibling|
       if sibling != @page || copying?
         sibling.position += 1
@@ -86,7 +84,8 @@ private
   def solve_slug_conflicts
     check_slug = @page.slug.sub(/-copy-?[0-9]*$/, "")
     count = 0
-    duplicates = Page.find_all_by_parent_id( @current_position == 2 ? @target.id : @target.parent.id, :conditions => [ "slug LIKE '?%%'", check_slug ] )
+    parent_id = @current_position == 2 ? @target.id : @target.parent.id
+    duplicates = Page.children_of_with_slug_like(parent_id, check_slug )
     duplicates.each do |d|
       m = d.slug.match("^#{check_slug}(-copy-?([0-9]*))?$")
       if !m.nil?
