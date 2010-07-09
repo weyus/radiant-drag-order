@@ -3,11 +3,11 @@ module DragOrder::PageControllerExtensions
   def move_to
     @page = Page.find(params[:id])
     @old_parent = @page.parent
-    @loc = params[:pos].to_i
+    @current_position = params[:pos].to_i
     
     remove_page_from_old_position unless copying?
     
-    @rel = Page.find(params[:rel])
+    @target = Page.find(params[:rel])
     
     # check first to see if there are any new, incoming pages with nil position values.
     # mimic the way Radiant orders the objects on index page with new positions
@@ -21,17 +21,17 @@ module DragOrder::PageControllerExtensions
         i += 1
       end
       @page = Page.find(params[:id])
-      @rel = Page.find(params[:rel])
+      @target = Page.find(params[:rel]) #HACK: doing this wtice
     end
     
-    make_room_for_page if @loc != 2
+    make_room_for_page if @current_position != 2
     
     if copying?
       @orig_parts = @page.parts
       @page = @page.clone
     end
     
-    @rel.reload
+    @target.reload
     
     put_page
     
@@ -58,17 +58,17 @@ private
   end
   
   def put_page
-    if @loc != 2
-      @page.parent = @rel.parent
-      @page.position = @rel.position.to_i + (@loc == 1 ? 1 : -1)
+    if @current_position != 2
+      @page.parent = @target.parent
+      @page.position = @target.position.to_i + (@current_position == 1 ? 1 : -1)
     else
-      @page.parent = @rel
+      @page.parent = @target
       @page.position = 1
     end
   end
   
   def make_room_for_page
-    new_siblings = Page.find_all_by_parent_id(@rel.parent_id, :conditions => [ 'position >= ?', @rel.position + @loc ])
+    new_siblings = Page.find_all_by_parent_id(@target.parent_id, :conditions => [ 'position >= ?', @target.position + @current_position ])
     new_siblings.each do |sibling|
       if sibling != @page || copying?
         sibling.position += 1
@@ -85,7 +85,7 @@ private
   def solve_slug_conflicts
     check_slug = @page.slug.sub(/-copy-?[0-9]*$/, "")
     count = 0
-    duplicates = Page.find_all_by_parent_id( @loc == 2 ? @rel.id : @rel.parent.id, :conditions => [ "slug LIKE '?%%'", check_slug ] )
+    duplicates = Page.find_all_by_parent_id( @current_position == 2 ? @target.id : @target.parent.id, :conditions => [ "slug LIKE '?%%'", check_slug ] )
     duplicates.each do |d|
       m = d.slug.match("^#{check_slug}(-copy-?([0-9]*))?$")
       if !m.nil?
