@@ -1,4 +1,4 @@
-module Drag::TagExtensions
+module DragOrder::TagExtensions
   def self.included(base)
     base.class_eval { alias_method_chain :children_find_options, :drag_order }
   end

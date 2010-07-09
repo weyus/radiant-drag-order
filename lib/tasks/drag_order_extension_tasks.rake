@@ -1,8 +1,8 @@
 namespace :radiant do
   namespace :extensions do
-    namespace :drag do
+    namespace :drag_order do
       
-      desc "Runs the migration of the Drag extension"
+      desc "Runs the migration of the DragOrder extension"
       task :migrate => :environment do
         require 'radiant/extension_migrator'
         if ENV["VERSION"]
@@ -12,11 +12,11 @@ namespace :radiant do
         end
       end
       
-      desc "Copies public assets of the Drag to the instance public/ directory."
+      desc "Copies public assets of the DragOrder extensions to the instance public/ directory."
       task :update => :environment do
         is_svn_or_dir = proc {|path| path =~ /\.svn/ || File.directory?(path) }
-        Dir[DragExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
-          path = file.sub(DragExtension.root, '')
+        Dir[DragOrderExtension.root + "/public/**/*"].reject(&is_svn_or_dir).each do |file|
+          path = file.sub(DragOrderExtension.root, '')
           directory = File.dirname(path)
           mkdir_p RAILS_ROOT + directory, :verbose => false
           cp file, RAILS_ROOT + path, :verbose => false

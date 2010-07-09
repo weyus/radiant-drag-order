@@ -1,10 +1,10 @@
 # Uncomment this if you reference any of your controllers in activate
 # require_dependency 'application_controller'
 
-class DragExtension < Radiant::Extension
+class DragOrderExtension < Radiant::Extension
   version "1.0"
-  description "Radiant Drag allows you to reorder pages funly"
-  url "http://github.com/squaretalent/radiant-drag-extension"
+  description "Radiant DragOrder allows you to reorder pages funly"
+  url "http://github.com/gerrit/radiant-drag-order"
   
   define_routes do |map|
     map.with_options :controller => 'admin/pages' do |page|
@@ -19,10 +19,10 @@ class DragExtension < Radiant::Extension
     admin.pages.index.add :node, "drag_order", :before=>"title_column"
     admin.pages.index.add :top, "top"
     
-    Page.send :include, Drag::PageExtensions
-    Admin::PagesController.send :helper, Drag::PageHelper
-    Admin::PagesController.send :include, Drag::PageControllerExtensions
-    StandardTags.send :include, Drag::TagExtensions
+    Page.send :include, DragOrder::PageExtensions
+    Admin::PagesController.send :helper, DragOrder::PageHelper
+    Admin::PagesController.send :include, DragOrder::PageControllerExtensions
+    StandardTags.send :include, DragOrder::TagExtensions
   end
   
 end

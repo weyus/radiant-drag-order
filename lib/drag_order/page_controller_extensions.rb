@@ -1,4 +1,4 @@
-module Drag::PageControllerExtensions
+module DragOrder::PageControllerExtensions
 
   def move_to
     @page = Page.find(params[:id])        # the moving page record
