@@ -6,9 +6,9 @@ namespace :radiant do
       task :migrate => :environment do
         require 'radiant/extension_migrator'
         if ENV["VERSION"]
-          DragExtension.migrator.migrate(ENV["VERSION"].to_i)
+          DragOrderExtension.migrator.migrate(ENV["VERSION"].to_i)
         else
-          DragExtension.migrator.migrate
+          DragOrderExtension.migrator.migrate
         end
       end
       
